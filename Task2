@@ -1,0 +1,159 @@
+/* CREATING A SIMPLE BLOG */
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Blog</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+    }
+    .container {
+      width: 80%;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .post {
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+    }
+    .post h2 {
+      margin: 0;
+    }
+    .actions button {
+      margin-right: 10px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .form-group button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .form-group button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Simple Blog</h1>
+    <div id="blog-posts">
+      <!-- Blog posts will be displayed here -->
+    </div>
+
+    <hr>
+
+    <h2>Create a New Post</h2>
+    <div id="post-form">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" id="title" placeholder="Enter post title">
+      </div>
+      <div class="form-group">
+        <label for="content">Content</label>
+        <textarea id="content" rows="5" placeholder="Write your post..."></textarea>
+      </div>
+      <div class="form-group">
+        <button onclick="createPost()">Create Post</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Store blog posts in an array
+    let posts = [];
+
+    // Function to display all posts
+    function displayPosts() {
+      const blogPostsContainer = document.getElementById('blog-posts');
+      blogPostsContainer.innerHTML = '';
+
+      if (posts.length === 0) {
+        blogPostsContainer.innerHTML = '<p>No blog posts available. Create one!</p>';
+        return;
+      }
+
+      posts.forEach((post, index) => {
+        const postDiv = document.createElement('div');
+        postDiv.className = 'post';
+        postDiv.innerHTML = `
+          <h2>${post.title}</h2>
+          <p>${post.content}</p>
+          <div class="actions">
+            <button onclick="editPost(${index})">Edit</button>
+            <button onclick="deletePost(${index})">Delete</button>
+          </div>
+        `;
+        blogPostsContainer.appendChild(postDiv);
+      });
+    }
+
+    // Function to create a new post
+    function createPost() {
+      const title = document.getElementById('title').value;
+      const content = document.getElementById('content').value;
+
+      if (!title || !content) {
+        alert('Please fill in both the title and content.');
+        return;
+      }
+
+      posts.push({ title, content });
+      document.getElementById('title').value = '';
+      document.getElementById('content').value = '';
+      displayPosts();
+    }
+
+    // Function to edit a post
+    function editPost(index) {
+      const newTitle = prompt('Edit Title:', posts[index].title);
+      const newContent = prompt('Edit Content:', posts[index].content);
+
+      if (newTitle && newContent) {
+        posts[index] = { title: newTitle, content: newContent };
+        displayPosts();
+      }
+    }
+
+    // Function to delete a post
+    function deletePost(index) {
+      if (confirm('Are you sure you want to delete this post?')) {
+        posts.splice(index, 1);
+        displayPosts();
+      }
+    }
+
+    // Display posts initially
+    displayPosts();
+  </script>
+</body>
+</html>
